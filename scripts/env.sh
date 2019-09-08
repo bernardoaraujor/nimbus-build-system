@@ -11,10 +11,10 @@
 ## get native Windows paths on Mingw
 #uname | grep -qi mingw && PWD_CMD="pwd -W"
 
-# We use ${BASH_SOURCE[0]} instead of $0 to allow sourcing this file
-# and we fall back to a Zsh-specific special var to also support Zsh.
-export REL_PATH="$(dirname ${BASH_SOURCE[0]:-${(%):-%x}})"
-export ABS_PATH="$(cd ${REL_PATH}; pwd)"
+# https://unix.stackexchange.com/a/76518
+export REL_PATH=`dirname "$0"`
+export ABS_PATH=`exec 2>/dev/null;(cd -- "$REL_PATH") && cd -- "$REL_PATH"|| cd "$REL_PATH"; unset PWD; /usr/bin/pwd || /bin/pwd || pwd`
+
 # do we still need this?
 #ABS_PATH_NATIVE="$(cd ${REL_PATH}; ${PWD_CMD})"
 
