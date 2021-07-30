@@ -37,7 +37,9 @@ build:
 	mkdir -p $@
 
 sanity-checks:
+ifndef OE
 	which $(CC) &>/dev/null || { echo "C compiler ($(CC)) not installed. Aborting."; exit 1; }
+endif
 
 #- check if "make update" was executed
 warn-update:
