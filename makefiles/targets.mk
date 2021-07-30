@@ -74,6 +74,7 @@ endif
 #- macOS is also a special case, with its "ln" not supporting "-r"
 #- the AppVeyor 32-bit build is done on a 64-bit image, so we need to override the architecture detection with ARCH_OVERRIDE
 build-nim: | sanity-checks
+ifndef OE
 	+ NIM_BUILD_MSG="$(BUILD_MSG) Nim compiler" \
 		V=$(V) \
 		CC=$(CC) \
@@ -81,6 +82,7 @@ build-nim: | sanity-checks
 		ARCH_OVERRIDE=$(ARCH_OVERRIDE) \
 		QUICK_AND_DIRTY_COMPILER=$(QUICK_AND_DIRTY_COMPILER) \
 		"$(CURDIR)/$(BUILD_SYSTEM_DIR)/scripts/build_nim.sh" "$(NIM_DIR)" ../Nim-csources-v1 ../nimble "$(CI_CACHE)"
+endif
 
 #- for each submodule, delete checked out files (that might prevent a fresh checkout); skip dotfiles
 #- in case of submodule URL changes, propagates that change in the parent repo's .git directory
@@ -105,7 +107,9 @@ update-common: | sanity-checks
 
 #- rebuilds the Nim compiler if the corresponding submodule is updated
 $(NIM_BINARY): | sanity-checks
+ifndef OE
 	+ "$(MAKE)" --no-print-directory build-nim
+endif
 
 # don't use this target, or you risk updating dependency repos that are not ready to be used in Nimbus
 update-remote:
