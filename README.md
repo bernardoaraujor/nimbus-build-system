@@ -157,6 +157,27 @@ You also need to specify it when using this non-default Nim compiler version:
 
 `make -j8 NIM_COMMIT="v1.2.6" nimbus_beacon_node`
 
+### OE
+
+Used only when cross-compiling via BitBake, in the context of Yocto Project and OpenEmbedded.
+
+Ignored by default, this variable modifies the behavior of the build system so it behaves appropriately inside BitBake.
+
+It is set inside BitBake recipes and classes (such as `nimbus-build-system.bbclass`) via `EXTRA_OEMAKE`:
+
+```
+EXTRA_OEMAKE = " \
+                 ARCH=${ARCH} \
+                 NIMCACHE_DIR=${NIMCACHE_DIR} \
+                 STAGING_DIR_TARGET=${STAGING_DIR_TARGET} \
+                 STAGING_DIR_NATIVE=${STAGING_DIR_NATIVE} \
+                 OE=1 \
+                 USE_SYSTEM_NIM=0 \
+                 USE_LIBBACKTRACE=0 \
+                 -e \
+"
+```
+
 ## Make targets
 
 ### build
